@@ -18,6 +18,13 @@ func main() {
 	// Wait for user input
   cmnd,_:=bufio.NewReader(os.Stdin).ReadString('\n')
   cmnd = strings.TrimSpace(cmnd)
+  
+  if strings.Contains(cmnd,"exit"){
+    // exit:=strings.Split(cmnd," ")
+    // exit_code:=exit[0]
+    break
+  }
+
   fmt.Fprintf(os.Stdout,"%s: command not found\n",cmnd)
   }
 }
