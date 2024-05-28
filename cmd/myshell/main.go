@@ -24,7 +24,19 @@ func main() {
     // exit_code:=exit[0]
     break
   }
+  var response strings.Builder
+  if strings.Contains(cmnd,"echo"){
+    text:=strings.Split(cmnd," ")
+    for i,el:= range text{
+      if i==0 {continue}
+      response.WriteString(el)
+      response.WriteString(" ")
+    }
+    fmt.Fprintf(os.Stdout,"%s\n",strings.TrimSpace(response.String()))
+  }else{
+      fmt.Fprintf(os.Stdout,"%s: command not found\n",cmnd)
+    }
 
-  fmt.Fprintf(os.Stdout,"%s: command not found\n",cmnd)
+
   }
 }
