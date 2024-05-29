@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -61,8 +63,21 @@ func main() {
 			// exit:=strings.Split(cmnd," ")
 			// exit_code:=exit[0]
 			break
-		}
+		} else {
+			exe := strings.Split(cmnd, " ")
 
-		fmt.Fprintf(os.Stdout, "%s: command not found\n", cmnd)
+			if _, err := exec.LookPath(exe[0]); err == nil {
+				// use(path)
+				cmd := exec.Command(exe[0], exe[1])
+				if out, err := cmd.CombinedOutput(); err == nil {
+					fmt.Fprintf(os.Stdout, "%s", out)
+				} else {
+					log.Fatal(err)
+				}
+			} else {
+				fmt.Fprintf(os.Stdout, "%s: command not found\n", cmnd)
+			}
+			continue
+		}
 	}
 }
