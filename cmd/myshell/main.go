@@ -4,17 +4,26 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 )
 
 var built_in_cmnds = []string{"echo", "type", "exit"}
 
-func main() {
-	// You can use print statements as follows for debugging, they'll be visible when running tests.
-	// fmt.Println("Logs from your program will appear here!")
+func checkInPath(name string) (string, bool) {
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	for _, el := range paths {
+		fullpath := filepath.Join(el, name)
+		if _, err := os.Stat(fullpath); err == nil {
+			return fullpath, true
+		}
+	}
+	return "", false
+}
 
-	// Uncomment this block to pass the first stage
+func main() {
+
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 
@@ -27,6 +36,8 @@ func main() {
 			type_chck := cmnd_t[1]
 			if slices.Contains(built_in_cmnds, type_chck) {
 				fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", type_chck)
+			} else if path, ok := checkInPath(type_chck); ok {
+				fmt.Fprintf(os.Stdout, "%s is %s\n", type_chck, path)
 			} else {
 				fmt.Fprintf(os.Stdout, "%s not found\n", type_chck)
 			}
