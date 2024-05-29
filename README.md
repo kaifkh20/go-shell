@@ -1,5 +1,6 @@
 <h1>Go Shell</h1>
 
+<p>Executes basic shell commands</p>
 
 <ol>
    <li>
